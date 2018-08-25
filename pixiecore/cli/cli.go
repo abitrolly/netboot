@@ -97,6 +97,10 @@ func mustFile(path string) []byte {
 	return bs
 }
 
+func StaticFromFlags(cmd *cobra.Command, kernel string, initrds []string, extraCmdline string) *pixiecore.Server {
+	return staticFromFlags(cmd, kernel, initrds, extraCmdline)
+}
+
 func staticFromFlags(cmd *cobra.Command, kernel string, initrds []string, extraCmdline string) *pixiecore.Server {
 	cmdline, err := cmd.Flags().GetString("cmdline")
 	if err != nil {

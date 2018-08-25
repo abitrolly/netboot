@@ -15,15 +15,32 @@
 package main
 
 import (
+	"os"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
 	"go.universe.tf/netboot/pixiecore"
 	"go.universe.tf/netboot/pixiecore/cli"
 	"go.universe.tf/netboot/third_party/ipxe"
 )
+
+func initConfig() {
+	viper.SetEnvPrefix("pixiecore")
+	viper.AutomaticEnv()
+}
+
+var rootCnd = &cobra.Command{
+	Use:   "netboot.xyz",
+	Short: "netboot.xyz PXE boot server",
+}
 
 func main() {
 	cli.Ipxe[pixiecore.FirmwareX86PC] = ipxe.MustAsset("undionly.kpxe")
 	cli.Ipxe[pixiecore.FirmwareEFI32] = ipxe.MustAsset("ipxe-i386.efi")
 	cli.Ipxe[pixiecore.FirmwareEFI64] = ipxe.MustAsset("ipxe-x86_64.efi")
 	cli.Ipxe[pixiecore.FirmwareEFIBC] = ipxe.MustAsset("ipxe-x86_64.efi")
-	cli.CLI()
+
+	cobra.OnInitialize(initConfig)
+
+	os.Exit(0)
 }
